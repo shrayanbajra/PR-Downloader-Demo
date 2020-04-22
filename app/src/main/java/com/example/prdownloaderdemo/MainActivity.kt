@@ -62,6 +62,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onError(error: Error?) {
+                Log.d("MainActivity", "ERROR: is Connection Error: ${error?.isConnectionError}")
+                Log.d("MainActivity", "ERROR: is Server Error: ${error?.isServerError}")
+                Log.d("MainActivity", "ERROR: Response Code: ${error?.responseCode}")
+                Log.d("MainActivity", "ERROR: Server Error Message: ${error?.serverErrorMessage}")
                 ToastUtils.show("Error while downloading")
             }
         })

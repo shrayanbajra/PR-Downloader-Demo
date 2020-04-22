@@ -20,6 +20,8 @@ object DownloadHelper {
         val safeUrl = url.replace("\\", "/")
 
         val fileName = URI(safeUrl).path.substringAfterLast('/')
+        Log.d("DownloadHelper", "Filename -> $fileName")
+        Log.d("DownloadHelper", "Download Location -> ${getDownloadLocation(fileName)}")
 
         return PRDownloader.download(
             url,
@@ -50,6 +52,16 @@ object DownloadHelper {
 
                 override fun onError(error: Error?) {
                     onDownloadListener.onError(error)
+                    Log.d(
+                        "DownloadHelper",
+                        "ERROR: is Connection Error: ${error?.isConnectionError}"
+                    )
+                    Log.d("DownloadHelper", "ERROR: is Server Error: ${error?.isServerError}")
+                    Log.d("DownloadHelper", "ERROR: Response Code: ${error?.responseCode}")
+                    Log.d(
+                        "DownloadHelper",
+                        "ERROR: Server Error Message: ${error?.serverErrorMessage}"
+                    )
                     Log.d("DownloadHelper", "onError()")
                 }
             })
