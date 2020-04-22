@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PR Downloader Demo</string>
+    <string name="enter_url">Enter URL</string>
+    <string name="download">Download</string>
 </resources>
