@@ -19,9 +19,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initViews()
+
+        downloadButtonListener()
+    }
+
+    private fun initViews() {
         etURI = findViewById(R.id.et_uri)
         btnDownload = findViewById(R.id.btn_download)
+    }
 
+    private fun downloadButtonListener() {
         btnDownload.setOnClickListener {
 
             val uri = getInputURI()
