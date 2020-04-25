@@ -15,11 +15,21 @@
         android:hint="@string/enter_url"
         android:importantForAutofill="no"
         android:inputType="textUri"
-        app:layout_constraintBottom_toTopOf="@id/progress_bar"
+        app:layout_constraintBottom_toTopOf="@id/tv_progress_bar_detail"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_progress_bar_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/progress_bar"
+        app:layout_constraintLeft_toLeftOf="@id/progress_bar"
+        app:layout_constraintTop_toBottomOf="@id/et_uri"
+        tools:text="15 MB / 20 MB" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -34,7 +44,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_download"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_uri"
+        app:layout_constraintTop_toBottomOf="@id/tv_progress_bar_detail"
         tools:progress="45"
         tools:visibility="visible" />
 
