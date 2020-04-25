@@ -11,15 +11,32 @@
         android:id="@+id/et_uri"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:hint="@string/enter_url"
         android:importantForAutofill="no"
         android:inputType="textUri"
-        app:layout_constraintBottom_toTopOf="@id/btn_download"
+        app:layout_constraintBottom_toTopOf="@id/progress_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="16dp"
+        android:max="100"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/btn_download"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_uri"
+        tools:progress="45"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/btn_download"
@@ -31,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_uri" />
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
 
     <Button
         android:id="@+id/btn_resume"
