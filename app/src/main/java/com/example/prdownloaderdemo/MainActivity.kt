@@ -20,42 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPause: Button
     private lateinit var btnCancel: Button
 
-    private val downloader = initDownloader()
     private var downloadID: Int = 0
-
-    private fun initDownloader(): DownloadHelper.OnDownload {
-        return object : DownloadHelper.OnDownload {
-
-            override fun onStartOrResume() {
-                ToastUtils.show("Starting Download")
-            }
-
-            override fun onProgress(progress: Progress) {
-                val downloadProgress = (progress.currentBytes / progress.totalBytes) * 100.0
-                Log.d("MainActivity", "Download Progress $downloadProgress")
-            }
-
-            override fun onPause() {
-                ToastUtils.show("Download Paused")
-            }
-
-            override fun onCancel() {
-                ToastUtils.show("Download Cancelled")
-            }
-
-            override fun onComplete() {
-                ToastUtils.show("Download Complete")
-            }
-
-            override fun onError(error: Error?) {
-                Log.d("MainActivity", "ERROR: is Connection Error: ${error?.isConnectionError}")
-                Log.d("MainActivity", "ERROR: is Server Error: ${error?.isServerError}")
-                Log.d("MainActivity", "ERROR: Response Code: ${error?.responseCode}")
-                Log.d("MainActivity", "ERROR: Server Error Message: ${error?.serverErrorMessage}")
-                ToastUtils.show("Error while downloading")
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +62,37 @@ class MainActivity : AppCompatActivity() {
     private fun getInputURI() = etURI.text.toString().trim()
 
     private fun downloadFile(URI: String) {
-        downloadID = DownloadHelper.download(URI, downloader)
+        downloadID = DownloadHelper.download(URI, object : DownloadHelper.OnDownload {
+
+            override fun onStartOrResume() {
+                ToastUtils.show("Starting Download")
+            }
+
+            override fun onProgress(progress: Progress) {
+                val downloadProgress = (progress.currentBytes / progress.totalBytes) * 100.0
+                Log.d("MainActivity", "Download Progress $downloadProgress")
+            }
+
+            override fun onPause() {
+                ToastUtils.show("Download Paused")
+            }
+
+            override fun onCancel() {
+                ToastUtils.show("Download Cancelled")
+            }
+
+            override fun onComplete() {
+                ToastUtils.show("Download Complete")
+            }
+
+            override fun onError(error: Error?) {
+                Log.d("MainActivity", "ERROR: is Connection Error: ${error?.isConnectionError}")
+                Log.d("MainActivity", "ERROR: is Server Error: ${error?.isServerError}")
+                Log.d("MainActivity", "ERROR: Response Code: ${error?.responseCode}")
+                Log.d("MainActivity", "ERROR: Server Error Message: ${error?.serverErrorMessage}")
+                ToastUtils.show("Error while downloading")
+            }
+        })
     }
 
     private fun btnResumeListener() {
