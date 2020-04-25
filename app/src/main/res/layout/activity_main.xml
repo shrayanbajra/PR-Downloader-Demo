@@ -26,10 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/progress_bar"
         app:layout_constraintLeft_toLeftOf="@id/progress_bar"
+        app:layout_constraintRight_toRightOf="@id/progress_bar"
         app:layout_constraintTop_toBottomOf="@id/et_uri"
-        tools:text="15 MB / 20 MB" />
+        tools:text="Completed: 45%"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

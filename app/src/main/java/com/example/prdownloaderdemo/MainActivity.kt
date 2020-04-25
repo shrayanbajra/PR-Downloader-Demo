@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.downloader.Error
 import com.downloader.Progress
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPause: Button
     private lateinit var btnCancel: Button
 
+    private lateinit var tvProgressBarDetails: TextView
     private lateinit var progressBar: ProgressBar
 
     private var downloadID: Int = 0
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         btnPause = findViewById(R.id.btn_pause)
         btnCancel = findViewById(R.id.btn_cancel)
 
+        tvProgressBarDetails = findViewById(R.id.tv_progress_bar_detail)
         progressBar = findViewById(R.id.progress_bar)
     }
 
@@ -72,12 +75,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onStartOrResume() {
                 ToastUtils.show("Starting Download")
-                showProgressBar()
+                showProgress()
             }
 
             override fun onProgress(progress: Progress) {
                 val downloadProgress = (progress.currentBytes * 100.0) / progress.totalBytes
                 progressBar.progress = downloadProgress.toInt()
+                val progressDetail = "Completed: ${downloadProgress.toInt()}%"
+                tvProgressBarDetails.text = progressDetail
                 Log.d("MainActivity", "Download Progress $downloadProgress")
             }
 
@@ -87,12 +92,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCancel() {
                 ToastUtils.show("Download Cancelled")
-                hideProgressBar()
+                hideProgress()
             }
 
             override fun onComplete() {
                 ToastUtils.show("Download Complete")
-                hideProgressBar()
+                hideProgress()
             }
 
             override fun onError(error: Error?) {
@@ -123,11 +128,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showProgressBar() {
+    private fun showProgress() {
         progressBar.visibility = View.VISIBLE
+        tvProgressBarDetails.visibility = View.VISIBLE
     }
 
-    private fun hideProgressBar() {
+    private fun hideProgress() {
         progressBar.visibility = View.GONE
+        tvProgressBarDetails.visibility = View.GONE
     }
 }
