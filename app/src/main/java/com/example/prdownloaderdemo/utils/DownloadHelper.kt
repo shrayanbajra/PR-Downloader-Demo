@@ -10,24 +10,12 @@ import java.net.URI
 
 object DownloadHelper {
 
-    fun getDownloadLocation(fileName: String = ""): String {
-        return Environment.getExternalStorageDirectory().absolutePath + "/Downloads/" + fileName
-    }
+    fun download(uri: String, onDownloadListener: OnDownload): Int {
 
-    fun download(url: String, onDownloadListener: OnDownload): Int {
+        val fileName = getFilenameFromURI(uri)
+        logFileStatus(fileName)
 
-        // because the backslash is not a valid character in url
-        val safeUrl = url.replace("\\", "/")
-
-        val fileName = URI(safeUrl).path.substringAfterLast('/')
-        Log.d("DownloadHelper", "Filename -> $fileName")
-        Log.d("DownloadHelper", "Download Location -> ${getDownloadLocation(fileName)}")
-
-        return PRDownloader.download(
-            url,
-            Environment.getExternalStorageDirectory().absolutePath + "/Downloads",
-            fileName
-        ).build()
+        return PRDownloader.download(uri, getDirPath(), fileName).build()
             .setOnStartOrResumeListener {
                 onDownloadListener.onStartOrResume()
                 Log.d("DownloadHelper", "setOnStartOrResumeListener()")
@@ -67,6 +55,27 @@ object DownloadHelper {
             })
     }
 
+    private const val DIRECTORY_NAME = "Downloads"
+
+    private fun getDirPath(): String {
+        return Environment.getExternalStorageDirectory().absolutePath + "/$DIRECTORY_NAME"
+    }
+
+    fun getFullPath(fileName: String = ""): String {
+        return Environment.getExternalStorageDirectory().absolutePath + "/$DIRECTORY_NAME/" + fileName
+    }
+
+    private fun logFileStatus(fileName: String) {
+        Log.d("DownloadHelper", "Filename -> $fileName")
+        Log.d("DownloadHelper", "Download Location -> ${getFullPath(fileName)}")
+    }
+
+    private fun getFilenameFromURI(url: String): String {
+        // because backslash is not a valid character in url
+        val safeUrl = url.replace("\\", "/")
+        return URI(safeUrl).path.substringAfterLast('/')
+    }
+
     fun resume(id: Int) {
         PRDownloader.resume(id)
     }
@@ -83,7 +92,6 @@ object DownloadHelper {
         PRDownloader.cancelAll()
     }
 
-
     interface OnDownload {
         fun onStartOrResume()
         fun onProgress(progress: Progress)
@@ -92,5 +100,4 @@ object DownloadHelper {
         fun onComplete()
         fun onError(error: Error?)
     }
-
 }
