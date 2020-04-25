@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnCancel: Button
 
     private val downloader = initDownloader()
+    private var downloadID: Int = 0
 
     private fun initDownloader(): DownloadHelper.OnDownload {
         return object : DownloadHelper.OnDownload {
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onProgress(progress: Progress) {
-                val downloadProgress = (progress.currentBytes / progress.totalBytes) * 100
+                val downloadProgress = (progress.currentBytes / progress.totalBytes) * 100.0
                 Log.d("MainActivity", "Download Progress $downloadProgress")
             }
 
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancel() {
-                ToastUtils.show("Download Paused")
+                ToastUtils.show("Download Cancelled")
             }
 
             override fun onComplete() {
@@ -96,24 +97,24 @@ class MainActivity : AppCompatActivity() {
     private fun getInputURI() = etURI.text.toString().trim()
 
     private fun downloadFile(URI: String) {
-        DownloadHelper.download(URI, downloader)
+        downloadID = DownloadHelper.download(URI, downloader)
     }
 
     private fun btnResumeListener() {
         btnResume.setOnClickListener {
-            downloader.onStartOrResume()
+            DownloadHelper.resume(downloadID)
         }
     }
 
     private fun btnPauseListener() {
         btnPause.setOnClickListener {
-            downloader.onPause()
+            DownloadHelper.pause(downloadID)
         }
     }
 
     private fun btnCancelListener() {
         btnCancel.setOnClickListener {
-            downloader.onCancel()
+            DownloadHelper.cancel(downloadID)
         }
     }
 }

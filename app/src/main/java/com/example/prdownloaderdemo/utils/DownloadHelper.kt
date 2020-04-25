@@ -75,6 +75,15 @@ object DownloadHelper {
         PRDownloader.pause(id)
     }
 
+    fun cancel(id: Int) {
+        PRDownloader.cancel(id)
+    }
+
+    fun cancelAll() {
+        PRDownloader.cancelAll()
+    }
+
+
     interface OnDownload {
         fun onStartOrResume()
         fun onProgress(progress: Progress)
