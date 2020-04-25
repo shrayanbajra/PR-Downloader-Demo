@@ -2,8 +2,10 @@ package com.example.prdownloaderdemo
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.downloader.Error
 import com.downloader.Progress
@@ -19,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnResume: Button
     private lateinit var btnPause: Button
     private lateinit var btnCancel: Button
+
+    private lateinit var progressBar: ProgressBar
 
     private var downloadID: Int = 0
 
@@ -43,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         btnResume = findViewById(R.id.btn_resume)
         btnPause = findViewById(R.id.btn_pause)
         btnCancel = findViewById(R.id.btn_cancel)
+
+        progressBar = findViewById(R.id.progress_bar)
     }
 
     private fun btnDownloadListener() {
@@ -66,10 +72,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onStartOrResume() {
                 ToastUtils.show("Starting Download")
+                showProgressBar()
             }
 
             override fun onProgress(progress: Progress) {
                 val downloadProgress = (progress.currentBytes * 100.0) / progress.totalBytes
+                progressBar.progress = downloadProgress.toInt()
                 Log.d("MainActivity", "Download Progress $downloadProgress")
             }
 
@@ -79,10 +87,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCancel() {
                 ToastUtils.show("Download Cancelled")
+                hideProgressBar()
             }
 
             override fun onComplete() {
                 ToastUtils.show("Download Complete")
+                hideProgressBar()
             }
 
             override fun onError(error: Error?) {
@@ -111,5 +121,13 @@ class MainActivity : AppCompatActivity() {
         btnCancel.setOnClickListener {
             DownloadHelper.cancel(downloadID)
         }
+    }
+
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progressBar.visibility = View.GONE
     }
 }
