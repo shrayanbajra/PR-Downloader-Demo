@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onProgress(progress: Progress) {
-                val downloadProgress = (progress.currentBytes / progress.totalBytes) * 100.0
+                val downloadProgress = (progress.currentBytes * 100.0) / progress.totalBytes
                 Log.d("MainActivity", "Download Progress $downloadProgress")
             }
 
