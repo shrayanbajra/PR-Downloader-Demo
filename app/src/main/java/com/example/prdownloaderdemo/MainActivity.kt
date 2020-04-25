@@ -13,40 +13,17 @@ import com.example.prdownloaderdemo.utils.ToastUtils
 class MainActivity : AppCompatActivity() {
 
     private lateinit var etURI: EditText
+
     private lateinit var btnDownload: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private lateinit var btnResume: Button
+    private lateinit var btnPause: Button
+    private lateinit var btnCancel: Button
 
-        initViews()
+    private val downloader = initDownloader()
 
-        downloadButtonListener()
-    }
-
-    private fun initViews() {
-        etURI = findViewById(R.id.et_uri)
-        btnDownload = findViewById(R.id.btn_download)
-    }
-
-    private fun downloadButtonListener() {
-        btnDownload.setOnClickListener {
-
-            val uri = getInputURI()
-
-            if (uri.isBlank()) {
-                ToastUtils.show("Please Enter URL")
-                return@setOnClickListener
-            }
-
-            downloadFile(uri)
-        }
-    }
-
-    private fun getInputURI() = etURI.text.toString().trim()
-
-    private fun downloadFile(URI: String) {
-        var downloader = DownloadHelper.download(URI, object : DownloadHelper.OnDownload {
+    private fun initDownloader(): DownloadHelper.OnDownload {
+        return object : DownloadHelper.OnDownload {
 
             override fun onStartOrResume() {
                 ToastUtils.show("Starting Download")
@@ -76,6 +53,67 @@ class MainActivity : AppCompatActivity() {
                 Log.d("MainActivity", "ERROR: Server Error Message: ${error?.serverErrorMessage}")
                 ToastUtils.show("Error while downloading")
             }
-        })
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        initViews()
+
+        btnDownloadListener()
+
+        btnResumeListener()
+        btnPauseListener()
+        btnCancelListener()
+    }
+
+    private fun initViews() {
+        etURI = findViewById(R.id.et_uri)
+
+        btnDownload = findViewById(R.id.btn_download)
+
+        btnResume = findViewById(R.id.btn_resume)
+        btnPause = findViewById(R.id.btn_pause)
+        btnCancel = findViewById(R.id.btn_cancel)
+    }
+
+    private fun btnDownloadListener() {
+        btnDownload.setOnClickListener {
+
+            val uri = getInputURI()
+
+            if (uri.isBlank()) {
+                ToastUtils.show("Please Enter URL")
+                return@setOnClickListener
+            }
+
+            downloadFile(uri)
+        }
+    }
+
+    private fun getInputURI() = etURI.text.toString().trim()
+
+    private fun downloadFile(URI: String) {
+        DownloadHelper.download(URI, downloader)
+    }
+
+    private fun btnResumeListener() {
+        btnResume.setOnClickListener {
+            downloader.onStartOrResume()
+        }
+    }
+
+    private fun btnPauseListener() {
+        btnPause.setOnClickListener {
+            downloader.onPause()
+        }
+    }
+
+    private fun btnCancelListener() {
+        btnCancel.setOnClickListener {
+            downloader.onCancel()
+        }
     }
 }
