@@ -2,4 +2,6 @@
     <string name="app_name">PR Downloader Demo</string>
     <string name="enter_url">Enter URL</string>
     <string name="download">Download</string>
+    <string name="pause">Pause</string>
+    <string name="cancel">Cancel</string>
 </resources>
